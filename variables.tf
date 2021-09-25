@@ -53,14 +53,21 @@ variable "cs_vip_ip" {
   default = "10.16.0.7"
 }
 
-# Replace CIDR address if using NSX Advanced Load Balancer service engines (SE-Data) 
+# Replace CIDR address if using Load Balancer  
 # and not using Tag for Segment
-variable "avi_se_data_cidr" {
+variable "lb_data_cidr" {
   default = "10.16.21.0/24"
 }
 
+# If using Load Balancer, replace value with appropriate value.  
+# If using scope, include "scope|tag" criteria
+# If using tag, include only the tag criteria
+variable "lb_tag" {
+  default = "lb"
+}
+
 # Desktop Pools
-# If using scope, include "tag|scope" criteria
+# If using scope, include "scope|tag" criteria
 # If using tag, include only the tag criteria
 variable "vdi_pool_tag" {
   default = "vdi"  
@@ -70,9 +77,3 @@ variable "vdi_pool_vm_name" {
   default = "FDB1N9"  
 }
 
-# If using Avi Load Balancer, replace value with appropriate value.  
-# If using scope, include "tag|scope" criteria
-# If using tag, include only the tag criteria
-variable "avi_se_tag" {
-  default = "avi|se"
-}

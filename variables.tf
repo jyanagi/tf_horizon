@@ -15,7 +15,7 @@ variable "password" {
 
 # Replace with IP address of Domain vCenter Server Appliance
 variable "vcenter_server" {
-  default = "10.26.11.50"
+  default = "10.26.11.100"
 }
 
 # Replace with VM naming convention for AD/LDAP Servers
@@ -67,7 +67,7 @@ variable "vdi_pool_tag" {
 }
 
 variable "vdi_pool_vm_name" {
-  default = "FDB1N95"  
+  default = "FDB1N9"  
 }
 
 # If using Avi Load Balancer, replace value with appropriate value.  

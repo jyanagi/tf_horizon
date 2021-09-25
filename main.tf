@@ -653,31 +653,11 @@ resource "nsxt_policy_context_profile" "cp_ldap" {
   }
 }
 
-# Create Security Policies
-
-# DFW Infrastructure Category Rules
-resource "nsxt_policy_security_policy" "Infrastructure" {
-  display_name = "Infrastructure"
-  description  = "Terraform provisioned Security Policy"
-  category     = "Infrastructure"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-
-  rule {
-    display_name = "Allow DHCP"
-    action       = "ALLOW"
-    services     = ["/infra/services/DHCP-Server", "/infra/services/DHCP-Client"]
-    logged       = false
-    notes        = "Allow access to DHCP Server"
-  }
-}
-
 # DFW Application Category Rules
 
-resource "nsxt_policy_security_policy" "allow_HZN_LB" {
-  display_name = "Horizon - LB Access Policy"
-  description  = "Horizon Load Balancer Access Policy"
+resource "nsxt_policy_security_policy" "allow_HZN" {
+  display_name = "Horizon Security Policies"
+  description  = "Horizon Security Policies"
   category     = "Application"
   locked       = false
   stateful     = true
@@ -790,18 +770,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_LB" {
     logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
-
-}
-
-resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
-  display_name = "Horizon - Internal Access Policy"
-  description  = "Horizon Internal Access Policy"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_LB]
-  
+ 
   rule {
     display_name       = "Internal - Horizon Client to Horizon Agent via PCoIP"
     destination_groups = [nsxt_policy_group.desktop_pool.path]
@@ -879,16 +848,6 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
     logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
-}
-
-resource "nsxt_policy_security_policy" "allow_HZN_External" {
-  display_name = "Horizon - External Access Policy"
-  description  = "Horizon External Access Policy"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_Internal]
   
   rule {
     display_name       = "External - Horizon Clients to UAG HTTPS"
@@ -919,16 +878,6 @@ resource "nsxt_policy_security_policy" "allow_HZN_External" {
     logged             = false
     scope              = [nsxt_policy_group.uag_vip.path]
   }
-}
-
-resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
-  display_name = "Horizon - UAG Services Policy"
-  description  = "Horizon UAG Services Policy"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_External]
 
   rule {
     display_name       = "UAG - Horizon Client to Horizon Portal"
@@ -993,17 +942,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
-}
-
-resource "nsxt_policy_security_policy" "allow_HZN_CS" {
-  display_name = "Horizon - Connection Server Policy"
-  description  = "Horizon Connection Server Policy"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_UAG]
-  
+ 
   rule {
     display_name       = "Horizon CS - CS to LDAP Servers"
     source_groups      = [nsxt_policy_group.connection_servers.path]
@@ -1163,19 +1102,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
-}
-
-resource "nsxt_policy_security_policy" "allow_HZN_VDI" {
-  display_name = "Horizon - VDI Policy"
-  description  = "Horizon Desktop Pool Policy"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_CS]
-  
   rule {
-    display_name       = "Horizon Desktop Pool to CS - JMS"
+    display_name       = "Horizon Desktop Pool - Pool to CS - JMS"
     source_groups      = [nsxt_policy_group.desktop_pool.path]
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
@@ -1184,19 +1112,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_VDI" {
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
-}
-
-resource "nsxt_policy_security_policy" "deny_HZN" {
-  display_name = "Horizon - Implicit Deny Rule"
-  description  = "Horizon Implicit Deny Rule"
-  category     = "Application"
-  locked       = false
-  stateful     = true
-  tcp_strict   = false
-  depends_on   = [nsxt_policy_security_policy.allow_HZN_VDI]
-
   rule {
-    display_name = "Horizon - Implicit Deny"
+    display_name = "Horizon - Explicit Deny"
     action       = "REJECT"
     logged       = true
     direction    = "IN_OUT"

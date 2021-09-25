@@ -322,25 +322,61 @@ resource "nsxt_policy_service" "service_hzn_mssql" {
   }
 }
 
+resource "nsxt_policy_service" "service_hzn_oracle" {
+  description  = "Horizon Connection Server - Oracle"
+  display_name = "HZN-SVC-ORACLE"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-ORACLE-1521"
+    description       = "Horizon Connection Server - ORACLE"
+    protocol          = "TCP"
+    destination_ports = ["1521"]
+  }
+}
+
 resource "nsxt_policy_service" "service_hzn_jms_legacy" {
   description  = "Horizon Connection Server - JMS Legacy"
   display_name = "HZN-SVC-JMS-LEGACY"
 
   l4_port_set_entry {
-    display_name      = "HZN-SVC-JMS-LEGACY-4100"
+    display_name      = "HZN-SVC-JMS-LEGACY-4001"
     description       = "Horizon Connection Server - JMS Legacy"
+    protocol          = "TCP"
+    destination_ports = ["4001"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_jms_enhanced" {
+  description  = "Horizon Connection Server - JMS Enhanced"
+  display_name = "HZN-SVC-JMS-ENHANCED"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-JMS-ENHANCED-4002"
+    description       = "Horizon Connection Server - JMS ENHANCED"
+    protocol          = "TCP"
+    destination_ports = ["4002"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_jms_redundancy" {
+  description  = "Horizon Connection Server - JMS Redundancy"
+  display_name = "HZN-SVC-JMS-REDUNDANCY"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-JMS-REDUNDANCY-4100"
+    description       = "Horizon Connection Server - JMS Redundancy"
     protocol          = "TCP"
     destination_ports = ["4100"]
   }
 }
 
 resource "nsxt_policy_service" "service_hzn_jms_ssl" {
-  description  = "Horizon Connection Server - JMS SSL"
+  description  = "Horizon Connection Server - JMS Redundancy SSL"
   display_name = "HZN-SVC-JMS-SSL"
 
   l4_port_set_entry {
     display_name      = "HZN-SVC-JMS-SSL-4101"
-    description       = "Horizon Connection Server - JMS SSL"
+    description       = "Horizon Connection Server - JMS Redundancy SSL"
     protocol          = "TCP"
     destination_ports = ["4101"]
   }
@@ -372,13 +408,96 @@ resource "nsxt_policy_service" "service_hzn_replica" {
 
 resource "nsxt_policy_service" "service_hzn_replica_ldap" {
   description  = "Horizon Connection Server Install Replica LDAP"
-  display_name = "HZN-SVC-REPLICA-LDAP"
+  display_name = "HZN-SVC-LDAP"
 
   l4_port_set_entry {
-    display_name      = "HZN-SVC-REPLICA-LDAP-389"
+    display_name      = "HZN-SVC-REPLICA-LDAP-TCP-389"
     description       = "Horizon Connection Server Install Replica LDAP"
     protocol          = "TCP"
     destination_ports = ["389"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-REPLICA-LDAP-TCP-636"
+    description       = "Horizon Connection Server Install Replica SLDAP"
+    protocol          = "TCP"
+    destination_ports = ["636"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-REPLICA-LDAP-UDP-389"
+    description       = "Horizon Connection Server Install Replica LDAP"
+    protocol          = "UDP"
+    destination_ports = ["389"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-REPLICA-LDAP-UDP-636"
+    description       = "Horizon Connection Server Install Replica SLDAP"
+    protocol          = "UDP"
+    destination_ports = ["636"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_kerberos" {
+  description  = "Horizon Connection Server to AD Kerberos"
+  display_name = "HZN-SVC-CS-KERBEROS"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-CS-KERBEROS"
+    description       = "Horizon Connection Server to AD Kerberos"
+    protocol          = "TCP"
+    destination_ports = ["88"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_netbios" {
+  description  = "Horizon Connection Server to Domain NetBIOS"
+  display_name = "HZN-SVC-CS-NETBIOS"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-CS-NETBIOS-UDP"
+    description       = "Horizon Connection Server to Domain NetBIOS"
+    protocol          = "UDP"
+    destination_ports = ["137-139"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-CS-NETBIOS-TCP"
+    description       = "Horizon Connection Server to Domain NetBIOS"
+    protocol          = "TCP"
+    destination_ports = ["137-139"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_dem" {
+  description  = "Horizon Dynamic Environment Manager"
+  display_name = "HZN-SVC-DEM"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-DEM-TCP"
+    description       = "Horizon Dynamic Environment Manager - TCP"
+    protocol          = "TCP"
+    destination_ports = ["135-139"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-DEM-UDP"
+    description       = "Horizon Dynamic Environment Manager - UDP"
+    protocol          = "UDP"
+    destination_ports = ["135-139"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_dem_flex" {
+  description  = "Horizon Dynamic Environment Manager Flex Engine to File Shares"
+  display_name = "HZN-SVC-DEM-FLEX"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-DEM-FLEX"
+    description       = "Horizon DEM Flex Engine"
+    protocol          = "TCP"
+    destination_ports = ["445"]
   }
 }
 
@@ -391,6 +510,54 @@ resource "nsxt_policy_service" "service_hzn_alg_ms_rpc" {
     description       = "Horizon Connection Server to Connection Server MS_RPC"
     protocol          = "TCP"
     destination_ports = ["135"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_alg_ms_rpc_dynamic" {
+  description  = "Horizon Connection Server to Connection Server Dynamic MS_RPC"
+  display_name = "HZN-SVC-ALG-MS_RPC-DYNAMIC"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-ALG-MS_RPC-DYNAMIC"
+    description       = "Horizon Connection Server to Connection Server Dynamic MS_RPC"
+    protocol          = "TCP"
+    destination_ports = ["49152-65535"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_uag_radius" {
+  description  = "Horizon UAG - RADIUS"
+  display_name = "HZN-SVC-UAG-RADIUS"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-UAG-RADIUS-5500"
+    description       = "Horizon UAG - RADIUS"
+    protocol          = "UDP"
+    destination_ports = ["5500"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_app_volumes_agent" {
+  description  = "Horizon App Volumes Agent"
+  display_name = "HZN-SVC-APP-VOLUMES-AGENT"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-APP-VOLUMES-AGENT"
+    description       = "Horizon App Volumes Agent"
+    protocol          = "TCP"
+    destination_ports = ["5985"]
+  }
+}
+
+resource "nsxt_policy_service" "service_hzn_cpa_vipa" {
+  description  = "Horizon Cloud Pod Architecture inter-pod VIPA"
+  display_name = "HZN-SVC-CPA-VIPA"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-CPA-VIPA"
+    description       = "Horizon Cloud Pod Architecture inter-pod VIPA"
+    protocol          = "TCP"
+    destination_ports = ["8472"]
   }
 }
 
@@ -450,6 +617,42 @@ resource "nsxt_policy_context_profile" "cp_mssql" {
   }
 }
 
+resource "nsxt_policy_context_profile" "cp_oracle" {
+  display_name = "HZN-CP-ORACLE"
+  description  = "Horizon Context Profile for ORACLE"
+  app_id {
+    description = "Horizon Context Profile for ORACLE"
+    value       = ["ORACLE"]
+  }
+}
+
+resource "nsxt_policy_context_profile" "cp_kerberos" {
+  display_name = "HZN-CP-KERBEROS"
+  description  = "Horizon Context Profile for KERBEROS"
+  app_id {
+    description = "Horizon Context Profile for KERBEROS"
+    value       = ["KERBEROS"]
+  }
+}
+
+resource "nsxt_policy_context_profile" "cp_ad" {
+  display_name = "HZN-CP-ACTIVE-DIRECTORY"
+  description  = "Horizon Context Profile for Active Directory"
+  app_id {
+    description = "Horizon Context Profile for Active Directory"
+    value       = ["ACTIVDIR"]
+  }
+}
+
+resource "nsxt_policy_context_profile" "cp_ldap" {
+  display_name = "HZN-CP-LDAP"
+  description  = "Horizon Context Profile for LDAP"
+  app_id {
+    description = "Horizon Context Profile for LDAP"
+    value       = ["LDAP"]
+  }
+}
+
 # Create Security Policies
 
 # DFW Infrastructure Category Rules
@@ -472,7 +675,123 @@ resource "nsxt_policy_security_policy" "Infrastructure" {
 
 # DFW Application Category Rules
 
+resource "nsxt_policy_security_policy" "allow_HZN_LB" {
+  display_name = "Horizon - LB Access Policy"
+  description  = "Horizon Load Balancer Access Policy"
+  category     = "Application"
+  locked       = false
+  stateful     = true
+  tcp_strict   = false
+  
+  rule {
+    display_name       = "Avi LB to UAG HTTPS"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.uag_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_HTTPS.path]
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
+    scope              = [nsxt_policy_group.uag_servers.path]
+  }
 
+  rule {
+    display_name       = "Avi LB to UAG PCoIP"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.uag_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_pcoip.path]
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
+    scope              = [nsxt_policy_group.uag_servers.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to UAG BLAST"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.uag_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_blast.path]
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
+    scope              = [nsxt_policy_group.uag_servers.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Connection Server HTML Access"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_HTTPS_8443.path]
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Connection Server HTTPS"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_HTTPS.path]
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Horizon Agent via BLAST Extreme"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.desktop_pool.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_blast_22443.path]
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
+    scope              = [nsxt_policy_group.desktop_pool.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Horizon Agent via PCoIP"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.desktop_pool.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_pcoip.path]
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
+    scope              = [nsxt_policy_group.desktop_pool.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Horizon Agent via RDP"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.desktop_pool.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_rdp.path]
+    #profiles           = [nsxt_policy_context_profile.cp_rdp.path]
+    logged             = false
+    scope              = [nsxt_policy_group.desktop_pool.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Horizon Agent Client Device Redirection"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.desktop_pool.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_cdr.path]
+    logged             = false
+    scope              = [nsxt_policy_group.desktop_pool.path]
+  }
+
+  rule {
+    display_name       = "Avi LB to Horizon Agent USB Redirection"
+    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    destination_groups = [nsxt_policy_group.desktop_pool.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_usb.path]
+    logged             = false
+    scope              = [nsxt_policy_group.desktop_pool.path]
+  }
+
+}
 
 resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
   display_name = "Horizon - Internal Access Policy"
@@ -481,14 +800,15 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
   locked       = false
   stateful     = true
   tcp_strict   = false
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_LB]
   
   rule {
     display_name       = "Internal - Horizon Client to Horizon Agent via PCoIP"
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
-    profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
 
@@ -497,8 +817,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast_22443.path]
-    profiles           = [nsxt_policy_context_profile.cp_blast.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
 
@@ -507,8 +827,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_rdp.path]
-    profiles           = [nsxt_policy_context_profile.cp_rdp.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_rdp.path]
+    logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
 
@@ -517,7 +837,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_cdr.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
 
@@ -526,37 +846,37 @@ resource "nsxt_policy_security_policy" "allow_HZN_Internal" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_usb.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.desktop_pool.path]
   }
 
   rule {
     display_name       = "Internal - Browser to Connection Server HTML Access"
-    destination_groups = [nsxt_policy_group.cs_vip.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS_8443.path]
-    profiles           = [nsxt_policy_context_profile.cp_https.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
   rule {
     display_name       = "Internal - Browser to Connection Server HTTP"
-    destination_groups = [nsxt_policy_group.cs_vip.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTP.path]
-    profiles           = [nsxt_policy_context_profile.cp_http.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_http.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
   rule {
     display_name       = "Internal - Browser to Connection Server HTTPS"
-    destination_groups = [nsxt_policy_group.cs_vip.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS.path]
-    profiles           = [nsxt_policy_context_profile.cp_https.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 }
@@ -568,15 +888,15 @@ resource "nsxt_policy_security_policy" "allow_HZN_External" {
   locked       = false
   stateful     = true
   tcp_strict   = false
-  depends_on   = [resource.nsxt_policy_security_policy.allow_HZN_Internal]
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_Internal]
   
   rule {
     display_name       = "External - Horizon Clients to UAG HTTPS"
     destination_groups = [nsxt_policy_group.uag_vip.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS.path]
-    profiles           = [nsxt_policy_context_profile.cp_https.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_vip.path]
   }
 
@@ -585,8 +905,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_External" {
     destination_groups = [nsxt_policy_group.uag_vip.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
-    profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_vip.path]
   }
 
@@ -595,8 +915,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_External" {
     destination_groups = [nsxt_policy_group.uag_vip.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast.path]
-    profiles           = [nsxt_policy_context_profile.cp_blast.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_vip.path]
   }
 }
@@ -608,16 +928,16 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
   locked       = false
   stateful     = true
   tcp_strict   = false
-  depends_on   = [resource.nsxt_policy_security_policy.allow_HZN_External]
-  
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_External]
+
   rule {
     display_name       = "UAG - Horizon Client to Horizon Portal"
     source_groups      = [nsxt_policy_group.uag_servers.path]
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS.path]
-    profiles           = [nsxt_policy_context_profile.cp_https.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.connection_servers.path]
   }
 
@@ -627,8 +947,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast_22443.path]
-    profiles           = [nsxt_policy_context_profile.cp_blast.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -638,8 +958,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
-    profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -649,8 +969,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_rdp.path]
-    profiles           = [nsxt_policy_context_profile.cp_rdp.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_rdp.path]
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -660,7 +980,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_cdr.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -670,7 +990,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_UAG" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_usb.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.uag_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 }
@@ -682,17 +1002,61 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
   locked       = false
   stateful     = true
   tcp_strict   = false
-  depends_on   = [resource.nsxt_policy_security_policy.allow_HZN_UAG]
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_UAG]
   
   rule {
-    display_name       = "Horizon CS - CS to MSSQL"
+    display_name       = "Horizon CS - CS to LDAP Servers"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_replica_ldap.path]
+    #profiles           = [nsxt_policy_context_profile.cp_ldap.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to Domain KERBEROS"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_kerberos.path]
+    #profiles           = [nsxt_policy_context_profile.cp_kerberos.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to Domain NetBIOS"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_netbios.path]
+    #profiles           = [nsxt_policy_context_profile.cp_kerberos.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to MSSQL DB"
     source_groups      = [nsxt_policy_group.connection_servers.path]
     destination_groups = [nsxt_policy_group.mssql_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_mssql.path]
-    profiles           = [nsxt_policy_context_profile.cp_mssql.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_mssql.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.mssql_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to vCenter Server"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.vcenter_server.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_HTTPS.path]
+    #profiles           = [nsxt_policy_context_profile.cp_https.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path]
   }
 
   rule {
@@ -701,8 +1065,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast_22443.path]
-    profiles           = [nsxt_policy_context_profile.cp_blast.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_blast.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -712,8 +1076,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
-    profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_pcoip.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -723,8 +1087,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_rdp.path]
-    profiles           = [nsxt_policy_context_profile.cp_rdp.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_rdp.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -734,7 +1098,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_cdr.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
   }
 
@@ -744,19 +1108,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_usb.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
-  }
-
-  rule {
-    display_name       = "Horizon CS - CS to Domain vCenter Server"
-    source_groups      = [nsxt_policy_group.connection_servers.path]
-    destination_groups = [nsxt_policy_group.vcenter_server.path]
-    action             = "ALLOW"
-    services           = [nsxt_policy_service.service_hzn_blast_22443.path]
-    profiles           = [nsxt_policy_context_profile.cp_blast.path]
-    logged             = true
-    scope              = [nsxt_policy_group.connection_servers.path]
   }
 
   rule {
@@ -764,8 +1117,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     source_groups      = [nsxt_policy_group.connection_servers.path]
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
-    services           = [nsxt_policy_service.service_hzn_jms_legacy.path]
-    logged             = true
+    services           = [nsxt_policy_service.service_hzn_jms_redundancy.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
@@ -775,7 +1128,7 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_jms_ssl.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
@@ -785,7 +1138,8 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_replica_ldap.path]
-    logged             = true
+    #profiles           = [nsxt_policy_context_profile.cp_ldap.path]
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
 
@@ -795,9 +1149,41 @@ resource "nsxt_policy_security_policy" "allow_HZN_CS" {
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_alg_ms_rpc.path]
-    logged             = true
+    logged             = false
     scope              = [nsxt_policy_group.connection_servers.path]
   }
+
+  rule {
+    display_name       = "Horizon CS - CS to CS MS-RPC DYNAMIC"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_alg_ms_rpc_dynamic.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path]
+  }
+
+}
+
+resource "nsxt_policy_security_policy" "allow_HZN_VDI" {
+  display_name = "Horizon - VDI Policy"
+  description  = "Horizon Desktop Pool Policy"
+  category     = "Application"
+  locked       = false
+  stateful     = true
+  tcp_strict   = false
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_CS]
+  
+  rule {
+    display_name       = "Horizon Desktop Pool to CS - JMS"
+    source_groups      = [nsxt_policy_group.desktop_pool.path]
+    destination_groups = [nsxt_policy_group.connection_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_jms_enhanced.path, nsxt_policy_service.service_hzn_jms_legacy.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.desktop_pool.path]
+  }
+
 }
 
 resource "nsxt_policy_security_policy" "deny_HZN" {
@@ -807,12 +1193,15 @@ resource "nsxt_policy_security_policy" "deny_HZN" {
   locked       = false
   stateful     = true
   tcp_strict   = false
-  depends_on   = [resource.nsxt_policy_security_policy.allow_HZN_CS]
+  depends_on   = [nsxt_policy_security_policy.allow_HZN_VDI]
 
   rule {
     display_name = "Horizon - Implicit Deny"
-    action       = "ALLOW"
-    logged       = false
-    scope        = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.cs_vip.path, nsxt_policy_group.uag_servers.path, nsxt_policy_group.uag_vip.path, nsxt_policy_group.mssql_servers.path, nsxt_policy_group.desktop_pool.path]
+    action       = "REJECT"
+    logged       = true
+    direction    = "IN_OUT"
+    ip_version   = "IPV4_IPV6"
+    log_label    = "horizon-deny-all"
+    scope        = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.uag_servers.path]
   }
 }

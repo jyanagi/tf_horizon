@@ -141,7 +141,7 @@ resource "nsxt_policy_group" "desktop_pool" {
   }
 }
 
-resource "nsxt_policy_group" "avi_se_data" {
+resource "nsxt_policy_group" "lb_data" {
   display_name = "HZN-GRP-LB"
   description  = "Horizon Avi Load Balancer Service Engine(s)"
 
@@ -150,7 +150,7 @@ resource "nsxt_policy_group" "avi_se_data" {
       key         = "Tag"
       member_type = "Segment"
       operator    = "EQUALS"
-      value       = var.avi_se_tag
+      value       = var.lb_tag
     }
   }
  
@@ -160,7 +160,7 @@ resource "nsxt_policy_group" "avi_se_data" {
 
   criteria {
     ipaddress_expression {
-      ip_addresses = [var.avi_se_data_cidr]
+      ip_addresses = [var.lb_data_cidr]
     }
   }
 }
@@ -664,8 +664,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   tcp_strict   = false
   
   rule {
-    display_name       = "Avi LB to UAG HTTPS"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to UAG HTTPS"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.uag_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS.path]
@@ -675,8 +675,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to UAG PCoIP"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to UAG PCoIP"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.uag_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
@@ -686,8 +686,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to UAG BLAST"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to UAG BLAST"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.uag_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast.path]
@@ -697,8 +697,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Connection Server HTML Access"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Connection Server HTML Access"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS_8443.path]
@@ -708,8 +708,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Connection Server HTTPS"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Connection Server HTTPS"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.connection_servers.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_HTTPS.path]
@@ -719,8 +719,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Horizon Agent via BLAST Extreme"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Horizon Agent via BLAST Extreme"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_blast_22443.path]
@@ -730,8 +730,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Horizon Agent via PCoIP"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Horizon Agent via PCoIP"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_pcoip.path]
@@ -741,8 +741,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Horizon Agent via RDP"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Horizon Agent via RDP"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_rdp.path]
@@ -752,8 +752,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Horizon Agent Client Device Redirection"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Horizon Agent Client Device Redirection"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_cdr.path]
@@ -762,8 +762,8 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
 
   rule {
-    display_name       = "Avi LB to Horizon Agent USB Redirection"
-    source_groups      = [nsxt_policy_group.avi_se_data.path]
+    display_name       = "Load Balancer to Horizon Agent USB Redirection"
+    source_groups      = [nsxt_policy_group.lb_data.path]
     destination_groups = [nsxt_policy_group.desktop_pool.path]
     action             = "ALLOW"
     services           = [nsxt_policy_service.service_hzn_usb.path]

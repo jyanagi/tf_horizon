@@ -439,6 +439,25 @@ resource "nsxt_policy_service" "service_hzn_replica_ldap" {
   }
 }
 
+resource "nsxt_policy_service" "service_hzn_replica_ldap_gc" {
+  description  = "Horizon Connection Server Install Replica LDAP GC"
+  display_name = "HZN-SVC-LDAP-GC"
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-REPLICA-LDAP-GC-TCP-3268"
+    description       = "Horizon Connection Server Install Replica LDAP GC"
+    protocol          = "TCP"
+    destination_ports = ["3268"]
+  }
+
+  l4_port_set_entry {
+    display_name      = "HZN-SVC-REPLICA-SLDAP-GC-TCP-3269"
+    description       = "Horizon Connection Server Install Replica SLDAP GC"
+    protocol          = "TCP"
+    destination_ports = ["3269"]
+  }
+}
+
 resource "nsxt_policy_service" "service_hzn_kerberos" {
   description  = "Horizon Connection Server to AD Kerberos"
   display_name = "HZN-SVC-CS-KERBEROS"
@@ -662,7 +681,7 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   locked       = false
   stateful     = true
   tcp_strict   = false
-  
+
   rule {
     display_name       = "Load Balancer to UAG HTTPS"
     source_groups      = [nsxt_policy_group.lb_data.path]
@@ -944,12 +963,42 @@ resource "nsxt_policy_security_policy" "allow_HZN" {
   }
  
   rule {
-    display_name       = "Horizon CS - CS to LDAP Servers"
+    display_name       = "Horizon CS - CS to Domain AD Services"
     source_groups      = [nsxt_policy_group.connection_servers.path]
     destination_groups = [nsxt_policy_group.ad_servers.path]
     action             = "ALLOW"
-    services           = [nsxt_policy_service.service_hzn_replica_ldap.path]
+    services           = [nsxt_policy_service.service_hzn_replica_ldap.path, nsxt_policy_service.service_hzn_replica_ldap_gc.path]
     #profiles           = [nsxt_policy_context_profile.cp_ldap.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to Domain RPC"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_alg_ms_rpc.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to Domain RPC (Dynamic)"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_alg_ms_rpc_dynamic.path]
+    logged             = false
+    scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
+  }
+
+  rule {
+    display_name       = "Horizon CS - CS to Domain SMB"
+    source_groups      = [nsxt_policy_group.connection_servers.path]
+    destination_groups = [nsxt_policy_group.ad_servers.path]
+    action             = "ALLOW"
+    services           = [nsxt_policy_service.service_hzn_dem_flex.path]
     logged             = false
     scope              = [nsxt_policy_group.connection_servers.path, nsxt_policy_group.ad_servers.path]
   }

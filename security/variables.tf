@@ -1,7 +1,7 @@
 # Variables
 # Replace with IP address or FQDN of NSX Manager
 variable "nsx_manager" {
-  default = "nsx01.pod2.demo"
+  default = "nsx01.pod3.demo"
 }
 
 # Username & Password for NSX-T Manager
@@ -15,7 +15,7 @@ variable "password" {
 
 # Replace with IP address of Domain vCenter Server Appliance
 variable "vcenter_server" {
-  default = "10.30.21.50"
+  default = "10.30.31.50"
 }
 
 # Replace with VM naming convention for AD/LDAP Servers
